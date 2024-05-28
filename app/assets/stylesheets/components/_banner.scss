@@ -1,20 +1,20 @@
 .banner-area {
   background-image: url("https://static01.nyt.com/images/2023/06/13/multimedia/as-dumpling-salad-lvtc/as-dumpling-salad-lvtc-threeByTwoMediumAt2X.jpg");
   background-size: cover;
-  background-position: center center;
-  height: 300px;
+  background-position: center;
+  height: 340px;
   width: 100%;
   overflow: hidden;
   box-shadow: 0px 10px 25px 2px rgba($color: black, $alpha: 0.1);
 }
 
 .headline {
-  text-align: left;
-  font-size: 40px !important;
+  text-align: center;
+  font-size: 36px !important;
   color: white !important;
-  text-shadow: 2px 5px 20px black !important;
+  text-shadow: 2px 5px 20px rgba(0, 0, 0, 0.44) !important;
   letter-spacing: 2px !important;
   text-transform: uppercase;
-  margin-top: 40px;
-  margin-left: 40px;
+  margin-top: 140px;
+  // margin-left: 40px;
 }

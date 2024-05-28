@@ -11,6 +11,7 @@ class MealDaysController < ApplicationController
     @meal_day = MealDay.new(meal_day_params)
     @meal_day.recipe = @recipe
     @meal_day.user = current_user
+
     if @meal_day.save!
       redirect_to meal_days_path
     else
@@ -45,7 +46,7 @@ class MealDaysController < ApplicationController
   def meal_day_params
     attributes = params.require(:meal_day).permit(:date, :quantity)
     attributes[:date] = Date.iso8601(attributes[:date])
-    attributes[:quantity] = attributes[:quantity].to_i
+    attributes[:quantity] = attributes[:quantity].to_i || 2
     attributes
   end
 

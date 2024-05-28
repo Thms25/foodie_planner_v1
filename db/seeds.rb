@@ -59,6 +59,40 @@ cuisine_types = [
   "Mediterranean"
 ]
 
+def create_recipe(hit)
+  photo = URI.open(hit["recipe"]["image"])
+
+  recipe = Recipe.new(
+    name: hit["recipe"]["label"],
+    description: hit["recipe"]["ingredientLines"].join("\n"),
+    prep_time: hit["recipe"]["totalTime"].to_i > 0 ? hit["recipe"]["totalTime"].to_i : [15, 30, 45, 60].sample,
+    rating: (1..5).to_a.sample,
+    servings: hit["recipe"]["yield"].to_i,
+    category: hit["recipe"]["cuisineType"],
+    calories: hit["recipe"]["calories"].to_f.round(1),
+    carbon: hit["recipe"]["co2EmissionsClass"],
+    fat: hit["recipe"]["totalNutrients"]["FAT"]["quantity"].to_f.round(1),
+    protein: hit["recipe"]["totalNutrients"]["PROCNT"]["quantity"].to_f.round(1),
+    sugar: hit["recipe"]["totalNutrients"]["SUGAR"]["quantity"].to_f.round(1),
+    glucid: hit["recipe"]["totalNutrients"]["CHOCDF.net"].nil? ? hit["recipe"]["totalNutrients"]["CHOCDF"]["quantity"].to_f.round(1) : hit["recipe"]["totalNutrients"]["CHOCOF.net"].to_f.round(1)
+  )
+
+  recipe.photo.attach(io: photo, filename: "#{recipe.name.split().join("_")}.png", content_type: "image/png")
+  recipe.save!
+  
+  puts "creating ingredients for #{recipe.name}"
+
+  hit["recipe"]["ingredients"].each do |ingredient|
+    Ingredient.create!(
+      name: ingredient["food"],
+      quantity: ingredient["weight"],
+      unit: "grams",
+      recipe_id: recipe.id,
+      category: ingredient["foodCategory"]
+    )
+  end
+end
+
 puts "let's populate the recipes and ingredients !"
 
 cuisine_types.each do |type|
@@ -69,33 +103,7 @@ cuisine_types.each do |type|
   puts "\nstarting with #{type} recipes - pagee 1\n"
 
   data["hits"].each do |hit|
-    photo = URI.open(hit["recipe"]["image"])
-    recipe = Recipe.new(
-      name: hit["recipe"]["label"],
-      description: hit["recipe"]["ingredientLines"].join("\n"),
-      prep_time: hit["recipe"]["totalTime"].to_i > 0 ? hit["recipe"]["totalTime"].to_i : [15, 30, 45, 60].sample,
-      rating: (1..5).to_a.sample,
-      servings: hit["recipe"]["yield"].to_i,
-      category: type,
-      calories: hit["recipe"]["calories"].to_f.round(1),
-      carbon: hit["recipe"]["co2EmissionsClass"],
-      fat: hit["recipe"]["totalNutrients"]["FAT"]["quantity"].to_f.round(1),
-      protein: hit["recipe"]["totalNutrients"]["PROCNT"]["quantity"].to_f.round(1),
-      sugar: hit["recipe"]["totalNutrients"]["SUGAR"]["quantity"].to_f.round(1),
-      glucid: hit["recipe"]["totalNutrients"]["CHOCDF.net"].nil? ? hit["recipe"]["totalNutrients"]["CHOCDF"]["quantity"].to_f.round(1) : hit["recipe"]["totalNutrients"]["CHOCOF.net"].to_f.round(1)
-    )
-    recipe.photo.attach(io: photo, filename: "#{recipe.name.split().join("_")}.png", content_type: "image/png")
-    recipe.save!
-    puts "creating ingredients for #{recipe.name}"
-    hit["recipe"]["ingredients"].each do |ingredient|
-      Ingredient.create!(
-        name: ingredient["food"],
-        quantity: ingredient["weight"],
-        unit: "grams",
-        recipe_id: recipe.id,
-        category: ingredient["foodCategory"]
-      )
-    end
+    create_recipe(hit)
   end
 
   sleep(5)
@@ -108,33 +116,7 @@ cuisine_types.each do |type|
   puts "\nstarting with #{type} recipes - pagee 2\n"
 
   data_2["hits"].each do |hit|
-    photo = URI.open(hit["recipe"]["image"])
-    recipe = Recipe.new(
-      name: hit["recipe"]["label"],
-      description: hit["recipe"]["ingredientLines"].join("\n"),
-      prep_time: hit["recipe"]["totalTime"].to_i > 0 ? hit["recipe"]["totalTime"].to_i : [15, 30, 45, 60].sample,
-      rating: (1..5).to_a.sample,
-      servings: hit["recipe"]["yield"].to_i,
-      category: type,
-      calories: hit["recipe"]["calories"].to_f.round(1),
-      carbon: hit["recipe"]["co2EmissionsClass"],
-      fat: hit["recipe"]["totalNutrients"]["FAT"]["quantity"].to_f.round(1),
-      protein: hit["recipe"]["totalNutrients"]["PROCNT"]["quantity"].to_f.round(1),
-      sugar: hit["recipe"]["totalNutrients"]["SUGAR"]["quantity"].to_f.round(1),
-      glucid: hit["recipe"]["totalNutrients"]["CHOCDF.net"].nil? ? hit["recipe"]["totalNutrients"]["CHOCDF"]["quantity"].to_f.round(1) : hit["recipe"]["totalNutrients"]["CHOCOF.net"].to_f.round(1)
-    )
-    recipe.photo.attach(io: photo, filename: "#{recipe.name.split().join("_")}.png", content_type: "image/png")
-    recipe.save!
-    puts "creating ingredients for #{recipe.name}"
-    hit["recipe"]["ingredients"].each do |ingredient|
-      Ingredient.create!(
-        name: ingredient["food"],
-        quantity: ingredient["weight"],
-        unit: "grams",
-        recipe_id: recipe.id,
-        category: ingredient["foodCategory"]
-      )
-    end
+    create_recipe(hit)
   end
 
   sleep(5)
@@ -147,34 +129,7 @@ cuisine_types.each do |type|
   puts "\nstarting with #{type} recipes - pagee 3\n"
 
   data_3["hits"].each do |hit|
-    photo = URI.open(hit["recipe"]["image"])
-    recipe = Recipe.new(
-      name: hit["recipe"]["label"],
-      description: hit["recipe"]["ingredientLines"].join("\n"),
-      prep_time: hit["recipe"]["totalTime"].to_i > 0 ? hit["recipe"]["totalTime"].to_i : [15, 30, 45, 60].sample,
-      rating: (1..5).to_a.sample,
-      servings: hit["recipe"]["yield"].to_i,
-      category: type,
-      calories: hit["recipe"]["calories"].to_f.round(1),
-      carbon: hit["recipe"]["co2EmissionsClass"],
-      fat: hit["recipe"]["totalNutrients"]["FAT"]["quantity"].to_f.round(1),
-      protein: hit["recipe"]["totalNutrients"]["PROCNT"]["quantity"].to_f.round(1),
-      sugar: hit["recipe"]["totalNutrients"]["SUGAR"]["quantity"].to_f.round(1),
-      glucid: hit["recipe"]["totalNutrients"]["CHOCDF.net"].nil? ? hit["recipe"]["totalNutrients"]["CHOCDF"]["quantity"].to_f.round(1) : hit["recipe"]["totalNutrients"]["CHOCOF.net"].to_f.round(1)
-    )
-    recipe.photo.attach(io: photo, filename: "#{recipe.name.split().join("_")}.png", content_type: "image/png")
-    recipe.save!
-    puts "creating ingredients for #{recipe.name}"
-    hit["recipe"]["ingredients"].each do |ingredient|
-      Ingredient.create!(
-        name: ingredient["food"],
-        quantity: ingredient["weight"],
-        unit: "grams",
-        recipe_id: recipe.id,
-        category: ingredient["foodCategory"]
-      )
-    end
-    sleep(2)
+    create_recipe(hit)
   end
 
   sleep(5)
@@ -187,33 +142,7 @@ cuisine_types.each do |type|
   puts "\nstarting with #{type} recipes - pagee 4\n"
 
   data_4["hits"].each do |hit|
-    photo = URI.open(hit["recipe"]["image"])
-    recipe = Recipe.new(
-      name: hit["recipe"]["label"],
-      description: hit["recipe"]["ingredientLines"].join("\n"),
-      prep_time: hit["recipe"]["totalTime"].to_i > 0 ? hit["recipe"]["totalTime"].to_i : [15, 30, 45, 60].sample,
-      rating: (1..5).to_a.sample,
-      servings: hit["recipe"]["yield"].to_i,
-      category: type,
-      calories: hit["recipe"]["calories"].to_f.round(1),
-      carbon: hit["recipe"]["co2EmissionsClass"],
-      fat: hit["recipe"]["totalNutrients"]["FAT"]["quantity"].to_f.round(1),
-      protein: hit["recipe"]["totalNutrients"]["PROCNT"]["quantity"].to_f.round(1),
-      sugar: hit["recipe"]["totalNutrients"]["SUGAR"]["quantity"].to_f.round(1),
-      glucid: hit["recipe"]["totalNutrients"]["CHOCDF.net"].nil? ? hit["recipe"]["totalNutrients"]["CHOCDF"]["quantity"].to_f.round(1) : hit["recipe"]["totalNutrients"]["CHOCOF.net"].to_f.round(1)
-    )
-    recipe.photo.attach(io: photo, filename: "#{recipe.name.split().join("_")}.png", content_type: "image/png")
-    recipe.save!
-    puts "creating ingredients for #{recipe.name}"
-    hit["recipe"]["ingredients"].each do |ingredient|
-      Ingredient.create!(
-        name: ingredient["food"],
-        quantity: ingredient["weight"],
-        unit: "grams",
-        recipe_id: recipe.id,
-        category: ingredient["foodCategory"]
-      )
-    end
+    create_recipe(hit)
   end
 
   sleep(5)
@@ -226,33 +155,7 @@ cuisine_types.each do |type|
   puts "\nstarting with #{type} recipes - pagee 5\n"
 
   data_5["hits"].each do |hit|
-    photo = URI.open(hit["recipe"]["image"])
-    recipe = Recipe.new(
-      name: hit["recipe"]["label"],
-      description: hit["recipe"]["ingredientLines"].join("\n"),
-      prep_time: hit["recipe"]["totalTime"].to_i > 0 ? hit["recipe"]["totalTime"].to_i : [15, 30, 45, 60].sample,
-      rating: (1..5).to_a.sample,
-      servings: hit["recipe"]["yield"].to_i,
-      category: type,
-      calories: hit["recipe"]["calories"].to_f.round(1),
-      carbon: hit["recipe"]["co2EmissionsClass"],
-      fat: hit["recipe"]["totalNutrients"]["FAT"]["quantity"].to_f.round(1),
-      protein: hit["recipe"]["totalNutrients"]["PROCNT"]["quantity"].to_f.round(1),
-      sugar: hit["recipe"]["totalNutrients"]["SUGAR"]["quantity"].to_f.round(1),
-      glucid: hit["recipe"]["totalNutrients"]["CHOCDF.net"].nil? ? hit["recipe"]["totalNutrients"]["CHOCDF"]["quantity"].to_f.round(1) : hit["recipe"]["totalNutrients"]["CHOCOF.net"].to_f.round(1)
-    )
-    recipe.photo.attach(io: photo, filename: "#{recipe.name.split().join("_")}.png", content_type: "image/png")
-    recipe.save!
-    puts "creating ingredients for #{recipe.name}"
-    hit["recipe"]["ingredients"].each do |ingredient|
-      Ingredient.create!(
-        name: ingredient["food"],
-        quantity: ingredient["weight"],
-        unit: "grams",
-        recipe_id: recipe.id,
-        category: ingredient["foodCategory"]
-      )
-    end
+    create_recipe(hit)
   end
 
 end

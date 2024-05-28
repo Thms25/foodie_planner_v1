@@ -6,8 +6,8 @@
 
 
 // Define fonts for body and headers
-$body-font: "Inter", "sans-serif";
-$headers-font: "Inter", "sans-serif";
+$body-font: "Avenir", "sans-serif";
+$headers-font: "Avenir", "sans-serif";
 
 
 body {
@@ -16,7 +16,7 @@ body {
 
 h1 {
   font-size: 2rem !important;
-  font-weight: 800 !important;
+  font-weight: 700 !important;
   color: #1A1423 !important;
 }
 
@@ -27,7 +27,7 @@ h2 {
 }
 
 h3 {
-  font-size: 1.4rem !important;
+  font-size: 1.3rem !important;
   font-weight: 400 !important;
   color: #1A1423 !important;
 }
@@ -39,24 +39,26 @@ h4 {
 }
 
 h5 {
-  font-size: 1.2rem !important;
+  font-size: 1.1rem !important;
   font-weight: 700 !important;
   color: #1A1423 !important;
 }
 
 h6 {
-  font-family: "Lora" !important;
-  font-size: 2rem !important;
+  font-family: "Lato" !important;
+  font-size: 1.8rem !important;
+  text-decoration: none !important;
 }
 
 .first-title {
-  text-decoration: underline;
+  font-family: "Avenir" !important;
+  text-decoration: none;
   margin-bottom: 0;
 }
 
 .subtitle {
-  font-family: "Lora" !important;
-  font-size: 2rem !important;
+  font-family: "Lato" !important;
+  font-size: 1.8rem !important;
   color: rgba($color: #1A1423, $alpha: 0.3) !important ;
   margin-top: 0;
   font-weight: 500;
@@ -68,26 +70,15 @@ h6 {
 
 p {
   font-size: 1rem !important;
-  font-weight: 400 !important;
+  font-weight: 300 !important;
   color: #1A1423 !important;
 }
 
 .bold {
-  font-weight: 700 !important;
+  font-weight: 500 !important;
 }
 
 .remove-link {
   text-decoration: none !important;
   color: #1A1423 !important;
 }
-
-
-// To use a font file (.woff) uncomment following lines
-// @font-face {
-//   font-family: "Font Name";
-//   src: font-url('FontFile.eot');
-//   src: font-url('FontFile.eot?#iefix') format('embedded-opentype'),
-//        font-url('FontFile.woff') format('woff'),
-//        font-url('FontFile.ttf') format('truetype')
-// }
-// $my-font: "Font Name";

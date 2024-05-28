@@ -3,10 +3,12 @@
     <h1 class="headline">Welcome to your <br>meal planner</h1>
   </div>
   <div class="containerrr">
+    
       <div class="line-above">
         <h6 class="first-title">Trending Recipes</h6>
         <p class="subtitle">Quickly access our most popular recipes</p>
       </div>
+
       <div class="scroll-box snap">
         <% @top_recipes[0..25].shuffle.each do |recipe| %>
             <div class="recipe-card">
@@ -14,29 +16,39 @@
               <%= cl_image_tag recipe.photo.key %>
               <div class="w-100 display-space" data-controller="heart" >
                 <div class="card-details-top">
+
                   <h2><%= recipe.name.split[0..2].join(' ') %></h2>
+
                   <% if recipe.favorites.where(user: current_user).empty? %>
+
                     <%= link_to recipe_favorites_path(recipe), data: { "turbo-method": :post } do %>
                       <%= render partial: "favorites/icon_empty" %>
                     <% end %>
+
                     <%= link_to recipe_favorite_path(recipe, recipe.favorites.where(user: current_user)), data: { "turbo-method": :delete }, class: "hide-icon" do %>
                       <%= render partial: "favorites/icon_fill" %>
                     <% end %>
+
                   <% else %>
                     <%= link_to recipe_favorite_path(recipe, recipe.favorites.where(user: current_user)), data: { "turbo-method": :delete } do %>
                       <%= render partial: "favorites/icon_fill" %>
                     <% end %>
+
                     <%= link_to recipe_favorites_path(recipe), data: { "turbo-method": :post }, class: "hide-icon" do %>
                       <%= render partial: "favorites/icon_empty" %>
                     <% end %>
+
                   <% end %>
+                  
                 </div>
+
                 <div class="card-details">
                   <p><i class="fa-solid fa-clock">&nbsp;</i><%= recipe.prep_time %>min</p>
                   <p><i class="fa-solid fa-user-group">&nbsp;</i><%= recipe.servings %></p>
                   <p><% recipe.rating.times do %><i class="fa-solid fa-star"></i>
                     <% end %></p>
                 </div>
+                
               </div>
             </div>
           <% end %>
@@ -114,6 +126,3 @@
       </div>
   </div>
 </div>
-
-
-<%# Modal meal to calendar %>
