@@ -7,7 +7,7 @@ class GroceryPolicy < ApplicationPolicy
   end
 
   def show?
-    true
+    record.user_id == user.id
   end
 
   def create?

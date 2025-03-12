@@ -15,6 +15,7 @@
                 <%= link_to recipe_path(recipe), class: "remove-link" do %>
                   <h2><%= recipe.name.split[0..4].join(' ') %></h2>
                 <% end %>
+                
                 <% if @fav_recipes.empty? %>
                   <%= link_to recipe_favorites_path(recipe), data: { "turbo-method": :post } do %>
                     <i class="fa-regular fa-heart heart-empty" data-action="click->heart#favorite" data-heart-target="iconempty"></i>
@@ -41,7 +42,7 @@
                   <% end %>
                 </p>
               </div>
-              
+
             </div>
           </div>
       <% end %>

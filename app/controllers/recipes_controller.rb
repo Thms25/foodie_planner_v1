@@ -10,25 +10,10 @@ class RecipesController < ApplicationController
 
     @categories = []
     @recipes.each do |recipe|
-      if recipe.name.include?(":")
-        recipe.name = recipe.name.split(":")[-1]
-      end
-      if recipe.name.include?("Recipes")
-        recipe.name = recipe.name.gsub("Recipes", "")
-      end
-      if recipe.name.include?("Recipe")
-        recipe.name = recipe.name.gsub("Recipe", "")
-      end
-      if recipe.name.include?("recipe")
-        recipe.name = recipe.name.gsub("recipe", "")
-      end
-      if recipe.name.include?("recipes")
-        recipe.name = recipe.name.gsub("recipes", "")
-      end
+      recipe.name = clean_recipe_name(recipe.name)
       recipe.save
       @categories << recipe.category unless @categories.include?(recipe.category)
     end
-
 
     if params[:query].present?
       @recipes = @recipes.search_by_name_desc_cat(params[:query])
@@ -38,21 +23,7 @@ class RecipesController < ApplicationController
 
   def show
     @recipe = Recipe.find(params[:id])
-    if @recipe.name.include?(":")
-      @recipe.name = @recipe.name.split(":")[-1]
-    end
-    if @recipe.name.include?("Recipes")
-      @recipe.name = @recipe.name.gsub("Recipes", "")
-    end
-    if @recipe.name.include?("Recipe")
-      @recipe.name = @recipe.name.gsub("Recipe", "")
-    end
-    if @recipe.name.include?("recipe")
-      @recipe.name = @recipe.name.gsub("recipe", "")
-    end
-    if @recipe.name.include?("recipes")
-      @recipe.name = @recipe.name.gsub("recipes", "")
-    end
+    @recipe.name = clean_recipe_name(@recipe.name)
     @meal_day = MealDay.new
     authorize @recipe
     @ingredients = @recipe.ingredients
@@ -75,7 +46,7 @@ class RecipesController < ApplicationController
       redirect_to new_recipe_ingredient_path(@recipe)
     else
       render :new, status: :unprocessable_entity, notice: "Fill the form correctly dummy"
-      redirect_to root_path
+      redirect_to(root_path)
     end
     authorize @recipe
   end
@@ -84,5 +55,16 @@ class RecipesController < ApplicationController
 
   def params_recipe
     params.require(:recipe).permit(:name, :description, :prep_time, :rating, :servings, :category, :photo)
+  end
+
+  def clean_recipe_name(name)
+    checks = ["Recipes", "Recipe", "recipe", "recipes"]
+    name = name.split(":")[-1] if name.include?(":")
+    checks.each do |check|
+      if name.include?(check)
+        name = name.gsub(check, "")
+      end
+    end
+    return name
   end
 end
